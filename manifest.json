@@ -1,6 +1,6 @@
 {
   "name": "Green Tomato",
-  "version": "0.1",
+  "version": "1.0",
   "description": "Pomodoro timer with a calming, color-based display",
   "icons": {
     "32": "tomato-32.png",
