@@ -1,6 +1,7 @@
 config.defaults({
     timerLength: 25 * 60 * 1000,
-    breakLength: 5 * 60 * 1000
+    breakLength: 5 * 60 * 1000,
+    blacklist: [],
 });
 
 var counting = false;
@@ -70,3 +71,13 @@ function blinkText() {
         setTimeout(blinkText, blinkDelay);
     }
 }
+
+function isBlacklisted(url) {
+    return config.get('blacklist').some(function(pat) {
+        return RegExp(pat).test(url);
+    });
+}
+
+chrome.extension.onRequest.addListener(function(msg, src, send) {
+    send(counting && isBlacklisted(msg.url))
+});
