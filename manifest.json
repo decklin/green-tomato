@@ -11,8 +11,8 @@
   "options_page": "options.html",
   "browser_action": {
     "default_icon": "icons/default.png",
-    "default_title": "Pomodoro",
-    "name": "Pomodoro Timer"
+    "default_title": "Green Tomato",
+    "name": "Green Tomato"
   },
   "content_scripts": [
     {
