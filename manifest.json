@@ -1,0 +1,26 @@
+{
+  "name": "Green Tomato",
+  "version": "0.1",
+  "description": "Pomodoro timer with a calming, color-based display",
+  "icons": {
+    "32": "tomato-32.png",
+    "48": "tomato-48.png",
+    "128": "tomato-128.png"
+  },
+  "background_page": "background.html",
+  "options_page": "options.html",
+  "browser_action": {
+    "default_icon": "icons/default.png",
+    "default_title": "Pomodoro",
+    "name": "Pomodoro Timer"
+  },
+  "content_scripts": [
+    {
+      "js": [ "green-tomato.js" ],
+      "matches": [ "http://*/*", "https://*/*" ],
+      "run_at": "document_start"
+    }
+  ],
+  "permissions": [
+  ]
+}
