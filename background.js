@@ -1,9 +1,11 @@
-var timerLength = 25 * 60 * 1000;
-var breakLength = 5 * 60 * 1000;
-var blinkDelay = 500;
+config.defaults({
+    timerLength: 25 * 60 * 1000,
+    breakLength: 5 * 60 * 1000
+});
 
 var counting = false;
 var blinking = false;
+var blinkDelay = 500;
 var blinkBadgeShown = false;
 var curIcon = 0;
 
@@ -38,7 +40,7 @@ chrome.browserAction.onClicked.addListener(function(tab) {
         counting = false;
         chrome.browserAction.setBadgeText({text: ''});
         chrome.browserAction.setIcon({path: breakIcon});
-        setTimeout(setIcon, breakLength);
+        setTimeout(setIcon, config.get('breakLength'));
     }
 });
 
@@ -51,7 +53,7 @@ function setIcon() {
             blinkText();
         } else {
             curIcon++;
-            setTimeout(setIcon, timerLength / timerIcons.length);
+            setTimeout(setIcon, config.get('timerLength') / timerIcons.length);
         }
     } else {
         chrome.browserAction.setIcon({path: defaultIcon});

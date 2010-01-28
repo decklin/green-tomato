@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Green Tomato Options</title>
+  <link rel="stylesheet" href="common/options.css" />
+  <script src="common/config.js"></script>
+  <script src="options.js"></script>
+</head>
+<body onload="init();">
+  <h1>Green Tomato Options</h1>
+  <div class="option">
+    <p class="label">Timer Length:</p>
+    <input type="text" id="timerLength" />
+    <p class="description">in minutes</p>
+  </div>
+  <div class="option">
+    <p class="label">Break Length:</p>
+    <input type="text" id="breakLength" />
+    <p class="description">in minutes</p>
+  </div>
+  <div class="actions">
+    <p>
+      <input type="button" value="Save Options" onclick="save();" />
+    </p>
+  </div>
+</body>
+</html>
