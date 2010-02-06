@@ -7,7 +7,7 @@ config.defaults({
 var counting = false;
 var blinking = false;
 var blinkDelay = 500;
-var blinkBadgeShown = false;
+var blinkBadge = false;
 var curIcon = 0;
 
 var defaultIcon = 'icons/default.png';
@@ -62,11 +62,8 @@ function setIcon() {
 
 function blinkText() {
     if (blinking) {
-        if ((blinkBadgeShown = !blinkBadgeShown)) {
-            chrome.browserAction.setBadgeText({text: '!!!'});
-        } else {
-            chrome.browserAction.setBadgeText({text: ''});
-        }
+        blinkBadge = !blinkBadge;
+        chrome.browserAction.setBadgeText({text: blinkBadge ? '!!!' : ''});
         setTimeout(blinkText, blinkDelay);
     }
 }
