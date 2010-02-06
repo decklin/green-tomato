@@ -47,13 +47,12 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 
 function setIcon() {
     if (counting) {
-        chrome.browserAction.setIcon({path: timerIcons[curIcon]});
-        if (curIcon == timerIcons.length - 1) {
+        if (curIcon == timerIcons.length) {
             counting = false;
             blinking = true;
             blinkText();
         } else {
-            curIcon++;
+            chrome.browserAction.setIcon({path: timerIcons[curIcon++]});
             setTimeout(setIcon, config.get('timerLength') / timerIcons.length);
         }
     } else {
