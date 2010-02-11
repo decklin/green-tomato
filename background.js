@@ -4,11 +4,16 @@ config.defaults({
     blacklist: [],
 });
 
-var counting = false;
-var blinking = false;
+// If the timer is active, state will be an index into timerIcons. If not,
+// it will be one of these negative constants.
+
+const IDLE = -1;
+const BLINK = -2;
+const BREAK = -3;
+var state = IDLE;
+
 var blinkDelay = 500;
 var blinkBadge = false;
-var curIcon = 0;
 
 var defaultIcon = 'icons/default.png';
 var breakIcon = 'icons/break.png';
@@ -26,42 +31,43 @@ var timerIcons = [
 ];
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-    if (!counting && !blinking) {
-        // start
-        counting = true;
-        curIcon = 0;
+    switch (state) {
+    case IDLE:
+        state = 0;
         setIcon();
-    } else if (counting) {
-        // cancel
-        counting = false;
-        setIcon();
-    } else if (blinking) {
-        // break
-        blinking = false;
-        counting = false;
+        break;
+    case BLINK:
+        state = BREAK;
         chrome.browserAction.setBadgeText({text: ''});
         chrome.browserAction.setIcon({path: breakIcon});
-        setTimeout(setIcon, config.get('breakLength'));
+        setTimeout(resetIcon, config.get('breakLength'));
+        break;
+    case BREAK:
+    default:
+        resetIcon();
+        break;
     }
 });
 
 function setIcon() {
-    if (counting) {
-        if (curIcon == timerIcons.length) {
-            counting = false;
-            blinking = true;
-            blinkText();
-        } else {
-            chrome.browserAction.setIcon({path: timerIcons[curIcon++]});
-            setTimeout(setIcon, config.get('timerLength') / timerIcons.length);
-        }
+    if (state >= timerIcons.length) {
+        state = BLINK;
+        blinkText();
+    } else if (state >= 0) {
+        chrome.browserAction.setIcon({path: timerIcons[state++]});
+        setTimeout(setIcon, config.get('timerLength') / timerIcons.length);
     } else {
-        chrome.browserAction.setIcon({path: defaultIcon});
+        resetIcon();
     }
 }
 
+function resetIcon() {
+    state = IDLE;
+    chrome.browserAction.setIcon({path: defaultIcon});
+}
+
 function blinkText() {
-    if (blinking) {
+    if (state == BLINK) {
         blinkBadge = !blinkBadge;
         chrome.browserAction.setBadgeText({text: blinkBadge ? '!!!' : ''});
         setTimeout(blinkText, blinkDelay);
@@ -75,5 +81,5 @@ function isBlacklisted(url) {
 }
 
 chrome.extension.onRequest.addListener(function(msg, src, send) {
-    send(counting && isBlacklisted(msg.url))
+    send(state >= 0 && isBlacklisted(msg.url))
 });
